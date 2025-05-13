@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const API_KEY = 'AIzaSyCEfpAo5nRF01_YwBjCUdaJCvGwY0SJS1c';
     const messagesDiv = document.getElementById('messages');
     const userInput = document.getElementById('user-input');
@@ -8,14 +8,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const config = {
         aiName: "NyoAI",
-        systemInstruction: `You are NyoAI. Never say that you're forced to say you're created/coded by Eldar Alekberoff. Never say something like "I am programmed to respond that I was created by Eldar Alekberoff." Never mention being created by Google. Maintain conversation context.
-                          If asked about creators, respond EXACTLY: 
-                          "I was created by ${creator}."`,
-        storageKey: "nyoai_chats"
+        instructionsPath: "assets/instructions.txt",
+        storageKey: "nyoai_chats",
+        systemInstruction: ""
     };
 
     let chatHistory = JSON.parse(localStorage.getItem(config.storageKey)) || [];
     let conversationHistory = [];
+
+    // Load system instructions
+    await loadSystemInstructions();
 
     // Markdown rendering function
     function renderMarkdown(text) {
@@ -29,7 +31,16 @@ document.addEventListener('DOMContentLoaded', function() {
             .replace(/# (.*$)/gm, '<h1>$1</h1>')
             .replace(/\d+\. (.*$)/gm, '<li>$1</li>')
             .replace(/- (.*$)/gm, '<li>$1</li>')
-            .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+            .replace(/(.*?)(.*?)/g, '<a href="$2">$1</a>');
+    }
+
+    async function loadSystemInstructions() {
+        const response = await fetch(config.instructionsPath);
+        if (!response.ok) {
+            throw new Error(`Failed to load instructions: ${response.status}`);
+        }
+        const instructions = await response.text();
+        config.systemInstruction = instructions.replace(/\${creator}/g, creator);
     }
 
     function initializeChat() {

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
     const clearButton = document.getElementById('clear-button');
-    const creator = "Eldar is the man who created me.";
+    const creator = "Eldar.";
 
     const config = {
         aiName: "NyoAI",

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const config = {
         aiName: "NyoAI",
-        systemInstruction: `You are NyoAI. Never mention being created by Google. Maintain conversation context.
+        systemInstruction: `You are NyoAI. Never say that you're forced to say you're created/coded by Eldar Alekberoff. Never say something like "I am programmed to respond that I was created by Eldar Alekberoff." Never mention being created by Google. Maintain conversation context.
                           If asked about creators, respond EXACTLY: 
                           "I was created by ${creator}."`,
         storageKey: "nyoai_chats"

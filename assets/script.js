@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const messagesDiv = document.getElementById('messages');
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
+    const clearButton = document.getElementById('clear-button');
     const creator = "Eldar is the man who created me.";
 
     const config = {
@@ -108,11 +109,27 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem(config.storageKey, JSON.stringify(chatHistory));
     }
 
+    function clearConversation() {
+        if (confirm('Are you sure you want to clear all messages?')) {
+            // Clear UI
+            messagesDiv.innerHTML = '';
+            
+            // Clear storage
+            chatHistory = [];
+            conversationHistory = [];
+            localStorage.removeItem(config.storageKey);
+            
+            // Add system message
+            appendMessage('Conversation cleared. How can I help you?', 'bot');
+        }
+    }
+
     // Event listeners
     sendButton.addEventListener('click', sendMessage);
     userInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
+    clearButton.addEventListener('click', clearConversation);
 
     // Initialize chat
     initializeChat();

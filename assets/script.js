@@ -1,4 +1,3 @@
-const API_KEY = 'AIzaSyCEfpAo5nRF01_YwBjCUdaJCvGwY0SJS1c';
 const messagesDiv = document.getElementById('messages');
 const userInput = document.getElementById('user-input');
 const creator = "Eldar is the man who created me.";
@@ -26,7 +25,7 @@ function renderMarkdown(text) {
         .replace(/# (.*$)/gm, '<h1>$1</h1>')
         .replace(/\d+\. (.*$)/gm, '<li>$1</li>')
         .replace(/- (.*$)/gm, '<li>$1</li>')
-        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+        .replace(/(.*?)(.*?)/g, '<a href="$2">$1</a>');
 }
 
 window.onload = () => {
@@ -52,22 +51,18 @@ async function sendMessage() {
     userInput.value = '';
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`, {
+        const response = await fetch('https://nyoai-api.onrender.com/gemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: conversationHistory,
-                systemInstruction: { parts: [{ text: config.systemInstruction }] },
-                generationConfig: {
-                    temperature: 0.2,
-                    topP: 0.95
-                }
+                systemInstruction: config.systemInstruction
             })
         });
 
         const data = await response.json();
-        const botMessage = data.candidates[0].content.parts[0].text;
-        
+        const botMessage = data.reply || 'No response received.';
+
         appendMessage(botMessage, 'bot');
         saveToHistory(botMessage, 'bot');
         conversationHistory.push({ 

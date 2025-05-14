@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     const config = {
         aiName: "NyoAI",
-        instructionsPath: "assets/instructions.txt",
+        instructionsPath: "https://pastebin.com/raw/6tXtX1qL",
         storageKey: "nyoai_chats",
         systemInstruction: ""
     };
